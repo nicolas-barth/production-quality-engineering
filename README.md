@@ -23,7 +23,7 @@
 
 <p align="center">
 
-[![Watch the Full Walkthrough](./assets/video-thumbnail.png)](https://youtube.com/YOUR_VIDEO)
+[![Watch the Full Walkthrough](./assets/video-thumbnail.png)](https://youtu.be/BprAgZM3lek)
 
 </p>
 
