@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shopping Cart — Your Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      .account-links a {
+        color: #ccc;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      main {
+        padding: 20px;
+      }
+      .alert {
+        padding: 10px 15px;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        display: none;
+      }
+      .alert-success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+      }
+      .alert-danger {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      .table-bordered {
+        border: 1px solid #dee2e6;
+      }
+      .table-bordered th,
+      .table-bordered td {
+        border: 1px solid #dee2e6;
+        padding: 8px 12px;
+        text-align: left;
+      }
+      .table-bordered thead {
+        background: #f8f9fa;
+      }
+      input[type='number'] {
+        width: 60px;
+        padding: 4px;
+        border: 1px solid #ccc;
+        text-align: center;
+      }
+      button.btn-update,
+      button.btn-remove {
+        border: none;
+        padding: 4px 8px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      button.btn-update {
+        background: #17a2b8;
+        color: #fff;
+      }
+      button.btn-remove {
+        background: #dc3545;
+        color: #fff;
+      }
+      .cart-summary {
+        text-align: right;
+        max-width: 350px;
+        margin-left: auto;
+      }
+      .cart-summary table {
+        width: 100%;
+      }
+      .cart-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .cart-actions a {
+        background: #007bff;
+        color: #fff;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 3px;
+      }
+      .cart-actions a:hover {
+        background: #0056b3;
+      }
+      #cart-empty-section {
+        text-align: center;
+        padding: 40px;
+      }
+      .coupon-section {
+        margin-top: 20px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      #input-coupon {
+        padding: 6px;
+        border: 1px solid #ccc;
+        width: 160px;
+      }
+      #button-coupon {
+        background: #6c757d;
+        color: #fff;
+        border: none;
+        padding: 6px 14px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none">Your Store</a>
+      <div class="header-right">
+        <div id="cart">
+          <button type="button" aria-label="Shopping cart">
+            <span id="cart-total">0 item(s)</span>
+          </button>
+        </div>
+        <div class="account-links">
+          <a class="nav-link" title="My Account" href="#">My Account</a>
+          <a href="/en-gb?route=account/login">Login</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <h1>Shopping Cart</h1>
+
+      <div role="alert" class="alert alert-success"></div>
+      <div role="alert" class="alert alert-danger"></div>
+
+      <div id="cart-empty-section" style="display: none">
+        <p>Your shopping cart is empty!</p>
+        <a href="/en-gb?route=common/home">Continue Shopping</a>
+      </div>
+
+      <div id="cart-filled-section">
+        <table class="table-bordered" id="cart-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Total</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="cart-tbody"></tbody>
+        </table>
+
+        <div class="coupon-section">
+          <label for="input-coupon">Coupon Code:</label>
+          <input
+            id="input-coupon"
+            type="text"
+            placeholder="Enter coupon code"
+            aria-label="Coupon code"
+          />
+          <button id="button-coupon" type="button">Apply Coupon</button>
+          <label for="input-voucher" style="margin-left: 15px">Gift Voucher:</label>
+          <input
+            id="input-voucher"
+            type="text"
+            placeholder="Enter voucher"
+            aria-label="Gift voucher code"
+            style="width: 120px; padding: 6px; border: 1px solid #ccc"
+          />
+          <button
+            id="button-voucher"
+            type="button"
+            style="
+              background: #6c757d;
+              color: #fff;
+              border: none;
+              padding: 6px 14px;
+              cursor: pointer;
+            "
+          >
+            Apply Voucher
+          </button>
+        </div>
+
+        <div class="cart-summary">
+          <table>
+            <tbody>
+              <tr>
+                <td>Sub-Total</td>
+                <td id="cart-subtotal">$0.00</td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td id="cart-grand-total">$0.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cart-actions">
+          <a href="/en-gb?route=common/home">Continue Shopping</a>
+          <a href="/en-gb?route=checkout/checkout">Checkout</a>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+
+      function getCart() {
+        try {
+          return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function renderCart() {
+        var cart = getCart();
+        var tbody = document.getElementById('cart-tbody');
+        var emptySection = document.getElementById('cart-empty-section');
+        var filledSection = document.getElementById('cart-filled-section');
+
+        if (cart.length === 0) {
+          emptySection.style.display = 'block';
+          filledSection.style.display = 'none';
+          document.getElementById('cart-total').textContent = '0 item(s)';
+          return;
+        }
+
+        emptySection.style.display = 'none';
+        filledSection.style.display = 'block';
+
+        var totalCount = cart.reduce(function (s, i) {
+          return s + i.qty;
+        }, 0);
+        document.getElementById('cart-total').textContent = totalCount + ' item(s)';
+
+        tbody.innerHTML = '';
+        var grandTotal = 0;
+        cart.forEach(function (item) {
+          var subtotal = item.price * item.qty;
+          grandTotal += subtotal;
+          var tr = document.createElement('tr');
+          tr.innerHTML = [
+            '<td>' + item.name + '</td>',
+            '<td>',
+            '  <input name="quantity[' +
+              item.id +
+              ']" type="number" value="' +
+              item.qty +
+              '" min="1" data-id="' +
+              item.id +
+              '" aria-label="Quantity for ' +
+              item.name +
+              '">',
+            '  <button type="button" class="btn-update" data-original-title="Update" data-id="' +
+              item.id +
+              '" aria-label="Update quantity for ' +
+              item.name +
+              '">Update</button>',
+            '</td>',
+            '<td>$' + item.price.toFixed(2) + '</td>',
+            '<td>$' + subtotal.toFixed(2) + '</td>',
+            '<td>',
+            '  <button type="button" class="btn-remove" data-original-title="Remove" data-id="' +
+              item.id +
+              '" aria-label="Remove ' +
+              item.name +
+              ' from cart">&#x2715;</button>',
+            '</td>',
+          ].join('');
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById('cart-subtotal').textContent = '$' + grandTotal.toFixed(2);
+        document.getElementById('cart-grand-total').textContent = '$' + grandTotal.toFixed(2);
+
+        // Bind remove buttons
+        tbody.querySelectorAll('button[data-original-title="Remove"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = parseInt(this.getAttribute('data-id'));
+            var updated = getCart().filter(function (i) {
+              return i.id !== id;
+            });
+            localStorage.setItem(CART_KEY, JSON.stringify(updated));
+            renderCart();
+          });
+        });
+
+        // Bind update buttons
+        tbody.querySelectorAll('button[data-original-title="Update"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = parseInt(this.getAttribute('data-id'));
+            var qtyInput = tbody.querySelector('input[data-id="' + id + '"]');
+            var newQty = parseInt(qtyInput.value) || 1;
+            var updated = getCart();
+            var item = updated.find(function (i) {
+              return i.id === id;
+            });
+            if (item) {
+              item.qty = newQty;
+            }
+            localStorage.setItem(CART_KEY, JSON.stringify(updated));
+            renderCart();
+          });
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        renderCart();
+
+        document.getElementById('button-coupon').addEventListener('click', function () {
+          var code = document.getElementById('input-coupon').value.trim();
+          var successAlert = document.querySelector('.alert-success');
+          var errorAlert = document.querySelector('.alert-danger');
+          if (/^SAVE\d*$/.test(code) || code === 'PROMO10') {
+            successAlert.textContent = 'Success: Your coupon discount has been applied!';
+            successAlert.style.display = 'block';
+            errorAlert.style.display = 'none';
+          } else {
+            errorAlert.textContent =
+              'Warning: Coupon is either invalid, expired or reached its usage limit!';
+            errorAlert.style.display = 'block';
+            successAlert.style.display = 'none';
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

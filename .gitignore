@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Playwright
+playwright-report/
+playwright/.auth/
+playwright/env-check.json
+test-results/
+allure-results/
+allure-report/
+allure-history/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# k6
+k6-results.json
+k6-report.html
+
+# Lighthouse
+lighthouse-*.json
+lighthouse-*.html
+
+# Environment
+.env
+.env.*
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your Store — OpenCart Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .navbar-toggler {
+        background: #555;
+        border: 1px solid #777;
+        color: #fff;
+        cursor: pointer;
+        padding: 6px 10px;
+        display: none;
+      }
+      @media (max-width: 768px) {
+        .navbar-toggler {
+          display: block;
+        }
+        #navbarSupportedContent {
+          display: none;
+        }
+        #navbarSupportedContent.show {
+          display: block;
+        }
+      }
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+      nav ul li a {
+        color: #ccc;
+        text-decoration: none;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      input[name='search'] {
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      #cart .dropdown-menu {
+        display: none;
+        position: absolute;
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 10px;
+        min-width: 200px;
+        z-index: 100;
+      }
+      .account-links a {
+        color: #ccc;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      main {
+        padding: 20px;
+      }
+      .alert {
+        padding: 10px 15px;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        display: none;
+      }
+      .alert-success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+      }
+      .alert-danger {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+      .product-thumb {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin: 10px;
+        display: inline-block;
+        vertical-align: top;
+        width: 180px;
+      }
+      .product-thumb img {
+        max-width: 100%;
+        height: 120px;
+        object-fit: cover;
+      }
+      .product-thumb .caption h4 a {
+        text-decoration: none;
+        color: #333;
+        font-size: 14px;
+      }
+      .product-thumb .caption .price {
+        color: #c00;
+        font-weight: bold;
+      }
+      .product-grid {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      #slideshow0 {
+        background: #eee;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; width: 100%">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon" aria-hidden="true">&#9776;</span>
+        </button>
+        <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none"
+          >Your Store</a
+        >
+      </div>
+      <div id="navbarSupportedContent">
+        <nav aria-label="Primary navigation">
+          <ul>
+            <li><a href="/en-gb?route=product/category&path=20">Desktops</a></li>
+            <li><a href="/en-gb?route=product/category&path=24">Phones &amp; PDAs</a></li>
+            <li><a href="/en-gb?route=product/category&path=18">Laptops &amp; Notebooks</a></li>
+            <li><a href="/en-gb?route=product/category&path=17">Cameras</a></li>
+            <li><a href="/en-gb?route=product/category&path=25">MP3 Players</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="header-right">
+        <form action="/en-gb?route=common/search" method="get" role="search">
+          <label for="search-input" class="sr-only" style="position: absolute; left: -9999px"
+            >Search</label
+          >
+          <input
+            id="search-input"
+            name="search"
+            type="search"
+            placeholder="Search"
+            aria-label="Search store products"
+          />
+          <button type="submit" aria-label="Submit search">Go</button>
+        </form>
+        <div id="cart">
+          <button type="button" aria-label="Shopping cart" aria-haspopup="true">
+            <span id="cart-total">0 item(s)</span>
+          </button>
+          <div class="dropdown-menu" role="region" aria-label="Mini cart"></div>
+        </div>
+        <div class="account-links">
+          <a class="nav-link" title="My Account" href="#" aria-haspopup="true">My Account</a>
+          <a href="/en-gb?route=account/login">Login</a>
+          <a href="/en-gb?route=account/register">Register</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <div role="alert" class="alert alert-success"></div>
+      <div role="alert" class="alert alert-danger"></div>
+
+      <div id="slideshow0" aria-label="Featured products slideshow">
+        <span>Featured Products</span>
+      </div>
+
+      <h3>Featured</h3>
+      <div class="product-grid">
+        <div class="product-thumb">
+          <a href="/en-gb?route=product/product&product_id=40">
+            <img src="" alt="iPhone" width="180" height="120" />
+          </a>
+          <div class="caption">
+            <h4><a href="/en-gb?route=product/product&product_id=40">iPhone</a></h4>
+            <p class="price">$101.00</p>
+          </div>
+          <button type="button" onclick="cart.add(40)" aria-label="Add iPhone to cart">
+            Add to Cart
+          </button>
+        </div>
+        <div class="product-thumb">
+          <a href="/en-gb?route=product/product&product_id=43">
+            <img src="" alt="MacBook" width="180" height="120" />
+          </a>
+          <div class="caption">
+            <h4><a href="/en-gb?route=product/product&product_id=43">MacBook</a></h4>
+            <p class="price">$602.00</p>
+          </div>
+          <button type="button" onclick="cart.add(43)" aria-label="Add MacBook to cart">
+            Add to Cart
+          </button>
+        </div>
+        <div class="product-thumb">
+          <a href="/en-gb?route=product/product&product_id=42">
+            <img src="" alt="Sony VAIO" width="180" height="120" />
+          </a>
+          <div class="caption">
+            <h4><a href="/en-gb?route=product/product&product_id=42">Sony VAIO</a></h4>
+            <p class="price">$1,202.00</p>
+          </div>
+          <button type="button" onclick="cart.add(42)" aria-label="Add Sony VAIO to cart">
+            Add to Cart
+          </button>
+        </div>
+        <div class="product-thumb">
+          <a href="/en-gb?route=product/product&product_id=30">
+            <img src="" alt="Canon EOS 5D" width="180" height="120" />
+          </a>
+          <div class="caption">
+            <h4><a href="/en-gb?route=product/product&product_id=30">Canon EOS 5D</a></h4>
+            <p class="price">$98.00</p>
+          </div>
+          <button type="button" onclick="cart.add(30)" aria-label="Add Canon EOS 5D to cart">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+      function getCart() {
+        try {
+          return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+      function updateBadge() {
+        var count = getCart().reduce(function (s, i) {
+          return s + i.qty;
+        }, 0);
+        document.getElementById('cart-total').textContent = count + ' item(s)';
+      }
+      updateBadge();
+
+      document.querySelector('.navbar-toggler').addEventListener('click', function () {
+        var target = document.getElementById('navbarSupportedContent');
+        target.classList.toggle('show');
+      });
+    </script>
+  </body>
+</html>

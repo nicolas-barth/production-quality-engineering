@@ -1,0 +1,58 @@
+{
+  "name": "production-qe-lab",
+  "version": "2.0.0",
+  "description": "Production Quality Engineering Lab — OpenCart e-commerce quality engineering case study",
+  "private": true,
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "doctor": "npm run typecheck && npm run lint && npm run format:check",
+    "quality:full": "npm run doctor && npm run test:mock && npm run reports",
+    "test:performance": "node scripts/run-k6.mjs k6/scripts/load-test.js",
+    "test:mock": "cross-env MOCK=true playwright test",
+    "test:mock:ui": "cross-env MOCK=true playwright test --ui",
+    "test:mock:headed": "cross-env MOCK=true playwright test --headed --project=chromium",
+    "test:mock:debug": "cross-env MOCK=true SLOW_MO=600 playwright test --headed --project=chromium --workers=1",
+    "test:mock:critical": "cross-env MOCK=true playwright test --grep @p0",
+    "test:pw": "playwright test",
+    "test:pw:p0": "playwright test --grep @p0",
+    "test:pw:api": "playwright test --grep @api",
+    "test:pw:a11y": "playwright test --grep @accessibility",
+    "test:pw:chromium": "playwright test --project=chromium",
+    "test:pw:firefox": "playwright test --project=firefox",
+    "test:pw:webkit": "playwright test --project=webkit",
+    "test:pw:report": "playwright show-report",
+    "test:cypress": "cypress run",
+    "test:cypress:open": "cypress open",
+    "test:cypress:mock": "cross-env CYPRESS_MOCK=true cypress run",
+    "reports": "node scripts/generate-reports.mjs",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "prepare": "playwright install"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "@types/node": "^20.14.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "allure-commandline": "^2.29.0",
+    "allure-playwright": "^3.0.2",
+    "cross-env": "^10.1.0",
+    "cypress": "^13.12.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "axios": "^1.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Created — Your Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      .account-links a {
+        color: #ccc;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      main {
+        padding: 40px 20px;
+      }
+      .btn {
+        display: inline-block;
+        background: #007bff;
+        color: #fff;
+        padding: 8px 18px;
+        text-decoration: none;
+        border-radius: 3px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none">Your Store</a>
+      <div class="header-right">
+        <div id="cart">
+          <button type="button" aria-label="Shopping cart">
+            <span id="cart-total">0 item(s)</span>
+          </button>
+        </div>
+        <div class="account-links">
+          <a class="nav-link" title="My Account" href="/en-gb?route=account/account">My Account</a>
+          <a href="/en-gb?route=account/logout">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <h1>Your Account Has Been Created!</h1>
+      <p>Congratulations! Your new account has been successfully created.</p>
+      <p>
+        You can now take advantage of member privileges to enhance your online shopping experience
+        with us.
+      </p>
+      <p>
+        If you have <strong>ANY</strong> questions about the operation of this online shop, please
+        <a href="#">e-mail the store owner</a>.
+      </p>
+      <p>A confirmation has been sent to your email address.</p>
+      <a class="btn" href="/en-gb?route=account/account">My Account</a>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+      function getCartCount() {
+        try {
+          return JSON.parse(localStorage.getItem(CART_KEY) || '[]').reduce(function (s, i) {
+            return s + i.qty;
+          }, 0);
+        } catch (e) {
+          return 0;
+        }
+      }
+      document.getElementById('cart-total').textContent = getCartCount() + ' item(s)';
+    </script>
+  </body>
+</html>

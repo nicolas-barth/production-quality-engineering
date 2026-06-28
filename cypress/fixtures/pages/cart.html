@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Shopping Cart — Your Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      main {
+        padding: 20px;
+      }
+      .alert {
+        padding: 10px 15px;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        display: none;
+      }
+      .alert-success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+      }
+      .alert-danger {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      .table-bordered,
+      .table-bordered th,
+      .table-bordered td {
+        border: 1px solid #dee2e6;
+        padding: 8px 12px;
+        text-align: left;
+      }
+      .table-bordered thead {
+        background: #f8f9fa;
+      }
+      input[type='number'] {
+        width: 60px;
+        padding: 4px;
+        border: 1px solid #ccc;
+        text-align: center;
+      }
+      button.btn-update {
+        background: #17a2b8;
+        color: #fff;
+        border: none;
+        padding: 4px 8px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      button.btn-remove {
+        background: #dc3545;
+        color: #fff;
+        border: none;
+        padding: 4px 8px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      .cart-summary {
+        text-align: right;
+        max-width: 350px;
+        margin-left: auto;
+      }
+      .cart-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        gap: 10px;
+      }
+      .cart-actions a {
+        background: #007bff;
+        color: #fff;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 3px;
+      }
+      #cart-empty-section {
+        text-align: center;
+        padding: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none">Your Store</a>
+      <div id="cart">
+        <button type="button">
+          <span id="cart-total" aria-label="0 item(s)">0 item(s)</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="content">
+      <h1>Shopping Cart</h1>
+      <div role="alert" class="alert alert-success"></div>
+      <div role="alert" class="alert alert-danger"></div>
+
+      <div id="cart-empty-section" style="display: none">
+        <p>Your shopping cart is empty!</p>
+        <a href="/en-gb?route=common/home">Continue Shopping</a>
+      </div>
+
+      <div id="cart-filled-section">
+        <table class="table-bordered">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Total</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="cart-tbody"></tbody>
+        </table>
+
+        <div class="cart-summary">
+          <table>
+            <tbody>
+              <tr>
+                <td>Sub-Total</td>
+                <td id="cart-subtotal">$0.00</td>
+              </tr>
+              <tr>
+                <td>Total</td>
+                <td id="cart-grand-total">$0.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cart-actions">
+          <a href="/en-gb?route=common/home">Continue Shopping</a>
+          <a href="/en-gb?route=checkout/checkout">Checkout</a>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+
+      function getCart() {
+        try {
+          return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function updateBadge(cart) {
+        var count = cart.reduce(function (s, i) {
+          return s + i.qty;
+        }, 0);
+        var text = count + ' item(s)';
+        var el = document.getElementById('cart-total');
+        el.textContent = text;
+        el.setAttribute('aria-label', text);
+      }
+
+      function renderCart() {
+        var cart = getCart();
+        var tbody = document.getElementById('cart-tbody');
+        var emptySection = document.getElementById('cart-empty-section');
+        var filledSection = document.getElementById('cart-filled-section');
+
+        updateBadge(cart);
+
+        if (cart.length === 0) {
+          emptySection.style.display = 'block';
+          filledSection.style.display = 'none';
+          return;
+        }
+
+        emptySection.style.display = 'none';
+        filledSection.style.display = 'block';
+
+        var grandTotal = 0;
+        tbody.innerHTML = '';
+
+        cart.forEach(function (item) {
+          var subtotal = item.price * item.qty;
+          grandTotal += subtotal;
+          var tr = document.createElement('tr');
+          tr.setAttribute('data-item-id', String(item.id));
+          tr.innerHTML =
+            '<td>' +
+            item.name +
+            '</td>' +
+            '<td>' +
+            '<input name="quantity[' +
+            item.id +
+            ']" type="number" value="' +
+            item.qty +
+            '" min="1" data-id="' +
+            item.id +
+            '" aria-label="Quantity for ' +
+            item.name +
+            '">' +
+            ' <button type="button" class="btn-update" data-original-title="Update" data-id="' +
+            item.id +
+            '" aria-label="Update">Update</button>' +
+            '</td>' +
+            '<td>$' +
+            item.price.toFixed(2) +
+            '</td>' +
+            '<td>$' +
+            subtotal.toFixed(2) +
+            '</td>' +
+            '<td><button type="button" class="btn-remove" data-original-title="Remove" data-id="' +
+            item.id +
+            '" aria-label="Remove ' +
+            item.name +
+            '">&#x2715;</button></td>';
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById('cart-subtotal').textContent = '$' + grandTotal.toFixed(2);
+        document.getElementById('cart-grand-total').textContent = '$' + grandTotal.toFixed(2);
+
+        bindButtons();
+      }
+
+      function bindButtons() {
+        // Remove — optimistic UI update first, then POST so cy.wait('@cartRemove') resolves
+        document.querySelectorAll('button[data-original-title="Remove"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = parseInt(this.getAttribute('data-id'), 10);
+
+            // Optimistic: update state and re-render immediately
+            var updated = getCart().filter(function (i) {
+              return i.id !== id;
+            });
+            localStorage.setItem(CART_KEY, JSON.stringify(updated));
+            renderCart();
+
+            // Network call for Cypress to intercept via cy.intercept('POST', '**/checkout/cart/remove**')
+            fetch('/en-gb/index.php?route=checkout/cart/remove', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: 'remove[' + id + ']=1',
+            }).catch(function () {
+              /* ignore network errors in mock mode */
+            });
+          });
+        });
+
+        // Update — optimistic UI update first, then POST so cy.wait('@cartEdit') resolves
+        document.querySelectorAll('button[data-original-title="Update"]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = parseInt(this.getAttribute('data-id'), 10);
+            var qtyInput = document.querySelector('input[data-id="' + id + '"]');
+            var newQty = parseInt(qtyInput ? qtyInput.value : '1', 10) || 1;
+
+            // Optimistic: update state and re-render immediately
+            var updated = getCart();
+            var item = updated.find(function (i) {
+              return i.id === id;
+            });
+            if (item) {
+              item.qty = newQty;
+            }
+            localStorage.setItem(CART_KEY, JSON.stringify(updated));
+            renderCart();
+
+            // Network call for Cypress to intercept via cy.intercept('POST', '**/checkout/cart/edit**')
+            fetch('/en-gb/index.php?route=checkout/cart/edit', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: 'quantity[' + id + ']=' + newQty,
+            }).catch(function () {
+              /* ignore network errors in mock mode */
+            });
+          });
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        renderCart();
+      });
+    </script>
+  </body>
+</html>

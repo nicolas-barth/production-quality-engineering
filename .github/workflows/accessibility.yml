@@ -1,0 +1,80 @@
+name: Accessibility Audit (Lighthouse)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    name: Lighthouse — ${{ matrix.page.name }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        page:
+          - name: Homepage
+            url: 'https://demo.opencart.com/en-gb?route=common/home'
+          - name: Product-Detail
+            url: 'https://demo.opencart.com/en-gb?route=product/product&product_id=40'
+          - name: Cart
+            url: 'https://demo.opencart.com/en-gb?route=checkout/cart'
+          - name: Login
+            url: 'https://demo.opencart.com/en-gb?route=account/login'
+          - name: Register
+            url: 'https://demo.opencart.com/en-gb?route=account/register'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Lighthouse
+        run: npm install -g lighthouse
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Run Lighthouse — ${{ matrix.page.name }}
+        run: |
+          lighthouse "${{ matrix.page.url }}" \
+            --output json \
+            --output html \
+            --output-path ./lighthouse-${{ matrix.page.name }} \
+            --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage --disable-gpu" \
+            --only-categories=accessibility,performance,best-practices \
+            --max-wait-for-load=45000 \
+            --quiet
+
+      - name: Assert accessibility score >= 85
+        run: |
+          node -e "
+            const report = require('./lighthouse-${{ matrix.page.name }}.report.json');
+            const a11yScore = Math.round(report.categories.accessibility.score * 100);
+            const perfScore = Math.round(report.categories.performance.score * 100);
+            console.log('Page: ${{ matrix.page.name }}');
+            console.log('Accessibility score:', a11yScore);
+            console.log('Performance score:', perfScore);
+            if (a11yScore < 85) {
+              console.error('FAIL: Accessibility score ' + a11yScore + ' is below threshold of 85');
+              process.exit(1);
+            }
+            console.log('PASS: Accessibility gate met');
+          "
+
+      - name: Upload Lighthouse report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-${{ matrix.page.name }}
+          path: |
+            lighthouse-${{ matrix.page.name }}.report.json
+            lighthouse-${{ matrix.page.name }}.report.html
+          retention-days: 30

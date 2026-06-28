@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "lib": ["ES2022", "dom"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./",
+    "baseUrl": ".",
+    "paths": {
+      "@pages/*": ["playwright/pages/*"],
+      "@fixtures": ["playwright/fixtures/index"],
+      "@utils/*": ["playwright/utils/*"],
+      "@data/*": ["playwright/data/*"]
+    },
+    "types": ["node"]
+  },
+  "include": ["*.ts", "playwright/**/*.ts", "cypress/**/*.ts"],
+  "exclude": ["node_modules", "dist", "playwright-report", "allure-results", "allure-report"]
+}

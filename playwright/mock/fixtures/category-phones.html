@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phones &amp; PDAs — Your Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .navbar-toggler {
+        background: #555;
+        border: 1px solid #777;
+        color: #fff;
+        cursor: pointer;
+        padding: 6px 10px;
+        display: none;
+      }
+      @media (max-width: 768px) {
+        .navbar-toggler {
+          display: block;
+        }
+        #navbarSupportedContent {
+          display: none;
+        }
+        #navbarSupportedContent.show {
+          display: block;
+        }
+      }
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+      nav ul li a {
+        color: #ccc;
+        text-decoration: none;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      .account-links a {
+        color: #ccc;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      main {
+        padding: 20px;
+      }
+      .product-thumb {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin: 10px;
+        display: inline-block;
+        vertical-align: top;
+        width: 180px;
+      }
+      .product-thumb img {
+        max-width: 100%;
+        height: 120px;
+        object-fit: cover;
+      }
+      .product-thumb .caption h4 a {
+        text-decoration: none;
+        color: #333;
+        font-size: 14px;
+      }
+      .product-thumb .caption .price {
+        color: #c00;
+        font-weight: bold;
+      }
+      .product-grid {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div style="display: flex; align-items: center; gap: 15px; width: 100%; flex-wrap: wrap">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon" aria-hidden="true">&#9776;</span>
+        </button>
+        <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none"
+          >Your Store</a
+        >
+      </div>
+      <div id="navbarSupportedContent">
+        <nav aria-label="Primary navigation">
+          <ul>
+            <li><a href="/en-gb?route=product/category&path=20">Desktops</a></li>
+            <li><a href="/en-gb?route=product/category&path=24">Phones &amp; PDAs</a></li>
+            <li><a href="/en-gb?route=product/category&path=18">Laptops &amp; Notebooks</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="header-right">
+        <div id="cart">
+          <button type="button" aria-label="Shopping cart">
+            <span id="cart-total">0 item(s)</span>
+          </button>
+        </div>
+        <div class="account-links">
+          <a class="nav-link" title="My Account" href="#">My Account</a>
+          <a href="/en-gb?route=account/login">Login</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <h2>Phones &amp; PDAs</h2>
+      <p>Browse our selection of mobile phones and PDAs.</p>
+
+      <div class="product-grid" aria-label="Category products">
+        <div class="product-thumb">
+          <a href="/en-gb?route=product/product&product_id=40">
+            <img src="" alt="iPhone" width="180" height="120" />
+          </a>
+          <div class="caption">
+            <h4><a href="/en-gb?route=product/product&product_id=40">iPhone</a></h4>
+            <p class="price">$101.00</p>
+          </div>
+        </div>
+        <div class="product-thumb">
+          <a href="/en-gb?route=product/product&product_id=32">
+            <img src="" alt="Samsung Galaxy Tab 10.1" width="180" height="120" />
+          </a>
+          <div class="caption">
+            <h4>
+              <a href="/en-gb?route=product/product&product_id=32">Samsung Galaxy Tab 10.1</a>
+            </h4>
+            <p class="price">$241.99</p>
+          </div>
+        </div>
+        <div class="product-thumb">
+          <a href="/en-gb?route=product/product&product_id=33">
+            <img src="" alt="Sony XPERIA" width="180" height="120" />
+          </a>
+          <div class="caption">
+            <h4><a href="/en-gb?route=product/product&product_id=33">Sony XPERIA</a></h4>
+            <p class="price">$75.00</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+      function getCartCount() {
+        try {
+          return JSON.parse(localStorage.getItem(CART_KEY) || '[]').reduce(function (s, i) {
+            return s + i.qty;
+          }, 0);
+        } catch (e) {
+          return 0;
+        }
+      }
+      document.getElementById('cart-total').textContent = getCartCount() + ' item(s)';
+
+      document.querySelector('.navbar-toggler').addEventListener('click', function () {
+        var target = document.getElementById('navbarSupportedContent');
+        target.classList.toggle('show');
+      });
+    </script>
+  </body>
+</html>

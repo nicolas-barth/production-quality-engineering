@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Account — Your Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      .account-links a {
+        color: #ccc;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      main {
+        padding: 20px;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      ul li a {
+        text-decoration: none;
+        color: #007bff;
+        display: block;
+        padding: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none">Your Store</a>
+      <div class="header-right">
+        <div id="cart">
+          <button type="button" aria-label="Shopping cart">
+            <span id="cart-total">0 item(s)</span>
+          </button>
+        </div>
+        <div class="account-links">
+          <a class="nav-link" title="My Account" href="/en-gb?route=account/account">My Account</a>
+          <a href="/en-gb?route=account/logout">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <h1>My Account</h1>
+      <p>Welcome back, Test Automation!</p>
+
+      <div style="display: flex; gap: 30px; flex-wrap: wrap">
+        <div>
+          <h2>My Account Information</h2>
+          <ul>
+            <li><a href="/en-gb?route=account/edit">Edit Account</a></li>
+            <li><a href="/en-gb?route=account/password">Change Password</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>My Orders</h2>
+          <ul>
+            <li><a href="/en-gb?route=account/order">Order History</a></li>
+            <li><a href="/en-gb?route=account/return">Returns</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>My Wish List</h2>
+          <ul>
+            <li><a href="/en-gb?route=account/wishlist">Wish List</a></li>
+          </ul>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+      function getCartCount() {
+        try {
+          return JSON.parse(localStorage.getItem(CART_KEY) || '[]').reduce(function (s, i) {
+            return s + i.qty;
+          }, 0);
+        } catch (e) {
+          return 0;
+        }
+      }
+      document.getElementById('cart-total').textContent = getCartCount() + ' item(s)';
+    </script>
+  </body>
+</html>

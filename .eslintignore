@@ -1,0 +1,26 @@
+# Generated test artifacts
+node_modules/
+
+# Cypress uses Chai assertion patterns (e.g. .to.be.true) that conflict with
+# @typescript-eslint/no-unused-expressions — linted separately by Cypress ecosystem
+cypress/
+dist/
+playwright-report/
+allure-report/
+allure-results/
+allure-history/
+test-results/
+
+# Evidence artifacts
+evidence/reports/
+evidence/screenshots/
+evidence/pipelines/
+evidence/demo/
+
+# Cypress generated output
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Build scripts (not TypeScript)
+scripts/

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login — Your Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      .account-links a {
+        color: #ccc;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      main {
+        padding: 20px;
+        max-width: 500px;
+      }
+      .alert {
+        padding: 10px 15px;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        display: none;
+      }
+      .alert-danger {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: bold;
+      }
+      input[type='email'],
+      input[type='password'] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+      }
+      input[type='submit'] {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        padding: 8px 20px;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      fieldset {
+        border: 1px solid #dee2e6;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 3px;
+      }
+      legend {
+        font-weight: bold;
+        padding: 0 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none">Your Store</a>
+      <div class="header-right">
+        <div id="cart">
+          <button type="button" aria-label="Shopping cart">
+            <span id="cart-total">0 item(s)</span>
+          </button>
+        </div>
+        <div class="account-links">
+          <a class="nav-link" title="My Account" href="#">My Account</a>
+          <a href="/en-gb?route=account/register">Register</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <h1>Account Login</h1>
+
+      <div role="alert" class="alert alert-danger" id="login-error"></div>
+
+      <div style="display: flex; gap: 30px; flex-wrap: wrap">
+        <div style="flex: 1; min-width: 240px">
+          <fieldset>
+            <legend>Returning Customer</legend>
+            <p>I am a returning customer.</p>
+            <form id="form-login" action="/en-gb?route=account/login" method="post">
+              <div class="form-group">
+                <label for="input-email">E-Mail Address</label>
+                <input
+                  id="input-email"
+                  type="email"
+                  name="email"
+                  placeholder="E-Mail Address"
+                  autocomplete="email"
+                />
+              </div>
+              <div class="form-group">
+                <label for="input-password">Password</label>
+                <input
+                  id="input-password"
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  autocomplete="current-password"
+                />
+              </div>
+              <div class="form-group">
+                <label><input type="checkbox" name="remember" value="1" /> Remember Me</label>
+              </div>
+              <div>
+                <input type="submit" value="Login" />
+              </div>
+            </form>
+            <p><a href="/en-gb?route=account/forgotten">Forgotten Password</a></p>
+          </fieldset>
+        </div>
+        <div style="flex: 1; min-width: 240px">
+          <fieldset>
+            <legend>New Customer</legend>
+            <p>
+              By creating an account you will be able to shop faster, be up to date on an order's
+              status, and keep track of the orders you have previously made.
+            </p>
+            <a href="/en-gb?route=account/register">Continue</a>
+          </fieldset>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+      function getCartCount() {
+        try {
+          return JSON.parse(localStorage.getItem(CART_KEY) || '[]').reduce(function (s, i) {
+            return s + i.qty;
+          }, 0);
+        } catch (e) {
+          return 0;
+        }
+      }
+      document.getElementById('cart-total').textContent = getCartCount() + ' item(s)';
+
+      // Mock login: accept known test password, reject all others.
+      // All test users from generateUser() use password 'SecureP@ss123!'.
+      var MOCK_VALID_PASSWORD = 'SecureP@ss123!';
+
+      document.getElementById('form-login').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var password = document.getElementById('input-password').value;
+        var errorEl = document.getElementById('login-error');
+
+        if (password === MOCK_VALID_PASSWORD) {
+          window.location.href = '/en-gb?route=account/account';
+        } else {
+          errorEl.textContent = 'Warning: No match for E-Mail Address and/or Password.';
+          errorEl.style.display = 'block';
+        }
+      });
+    </script>
+  </body>
+</html>

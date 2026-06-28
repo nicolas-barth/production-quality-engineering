@@ -1,0 +1,8 @@
+export const THRESHOLD_VALUES = {
+  HTTP_P95_MS:          3000,
+  HTTP_P99_MS:          8000,
+  CART_P95_MS:          5000,
+  APP_MAX_ERROR_RATE:   0.05,
+  SPIKE_MAX_ERROR_RATE: 0.05,
+  INFRA_MAX_FAIL_RATE:  0.10,
+};

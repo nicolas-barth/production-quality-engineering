@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>iPhone — Your Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      input[name='search'] {
+        padding: 6px;
+        border: 1px solid #ccc;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      .account-links a {
+        color: #ccc;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      main {
+        padding: 20px;
+      }
+      .alert {
+        padding: 10px 15px;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        display: none;
+      }
+      .alert-success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+      }
+      .alert-danger {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+      .price-new {
+        color: #c00;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      #button-cart {
+        background: #28a745;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      #input-quantity {
+        width: 60px;
+        padding: 5px;
+        text-align: center;
+        border: 1px solid #ccc;
+      }
+      ul.list-unstyled {
+        list-style: none;
+        padding: 0;
+      }
+      .thumbnails {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        gap: 8px;
+      }
+      .thumbnails li a img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border: 1px solid #ddd;
+      }
+      .nav-tabs {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        gap: 2px;
+        border-bottom: 2px solid #dee2e6;
+      }
+      .nav-tabs a {
+        padding: 8px 16px;
+        text-decoration: none;
+        color: #333;
+        border: 1px solid transparent;
+      }
+      .tab-content > div {
+        display: none;
+        padding: 20px 0;
+      }
+      .tab-content > div.active {
+        display: block;
+      }
+      .rating label {
+        cursor: pointer;
+        font-size: 20px;
+        color: #ddd;
+      }
+      .rating label:hover,
+      .rating label.selected {
+        color: #f0a500;
+      }
+      textarea {
+        width: 100%;
+        height: 100px;
+        border: 1px solid #ccc;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none">Your Store</a>
+      <div class="header-right">
+        <form action="/en-gb?route=common/search" method="get" role="search">
+          <label for="search-input" style="position: absolute; left: -9999px">Search</label>
+          <input
+            id="search-input"
+            name="search"
+            type="search"
+            placeholder="Search"
+            aria-label="Search store products"
+          />
+          <button type="submit" aria-label="Submit search">Go</button>
+        </form>
+        <div id="cart">
+          <button type="button" aria-label="Shopping cart">
+            <span id="cart-total">0 item(s)</span>
+          </button>
+        </div>
+        <div class="account-links">
+          <a class="nav-link" title="My Account" href="#">My Account</a>
+          <a href="/en-gb?route=account/login">Login</a>
+          <a href="/en-gb?route=account/register">Register</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <div role="alert" class="alert alert-success"></div>
+      <div role="alert" class="alert alert-danger"></div>
+
+      <div style="display: flex; gap: 30px; flex-wrap: wrap">
+        <div>
+          <img
+            id="image-main"
+            src=""
+            alt="iPhone"
+            width="300"
+            height="300"
+            style="border: 1px solid #ddd"
+          />
+          <ul class="thumbnails">
+            <li>
+              <a href="#"><img src="" alt="iPhone front view" width="60" height="60" /></a>
+            </li>
+            <li>
+              <a href="#"><img src="" alt="iPhone back view" width="60" height="60" /></a>
+            </li>
+          </ul>
+        </div>
+        <div style="flex: 1; min-width: 250px">
+          <h1 class="title-product">iPhone</h1>
+          <div class="price-new">$101.00</div>
+          <div id="product-tab-description">
+            <ul class="list-unstyled">
+              <li><strong>Brand:</strong> Apple</li>
+              <li><strong>Model:</strong> Product 11</li>
+              <li>
+                <strong>Availability:</strong> <span class="label label-success">In Stock</span>
+              </li>
+            </ul>
+          </div>
+          <div style="margin: 15px 0; display: flex; align-items: center; gap: 10px">
+            <label for="input-quantity">Qty</label>
+            <input id="input-quantity" type="number" value="1" min="1" max="999" />
+            <button id="button-cart" type="button">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <ul class="nav-tabs" role="tablist">
+        <li role="presentation"><a href="#tab-description" role="tab">Description</a></li>
+        <li role="presentation"><a href="#tab-specification" role="tab">Specification</a></li>
+        <li role="presentation"><a href="#tab-review" role="tab">Reviews (0)</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="tab-description" class="active" role="tabpanel">
+          <p>
+            The iPhone is a revolutionary phone that allows you to make a call, listen to music...
+          </p>
+        </div>
+        <div id="tab-specification" role="tabpanel">
+          <p>Dimensions: 115.5 x 61.0 x 11.7mm, Weight: 135g</p>
+        </div>
+        <div id="tab-review" role="tabpanel">
+          <form id="form-review">
+            <fieldset>
+              <legend>Write a Review</legend>
+              <div>
+                <label for="input-name">Your Name</label>
+                <input id="input-name" type="text" placeholder="Your Name" />
+              </div>
+              <div>
+                <label for="input-review">Your Review</label>
+                <textarea id="input-review" placeholder="Your Review"></textarea>
+              </div>
+              <div class="rating" id="input-rating">
+                <label for="input-rating-1">&#9733;</label
+                ><input id="input-rating-1" type="radio" name="rating" value="1" />
+                <label for="input-rating-2">&#9733;</label
+                ><input id="input-rating-2" type="radio" name="rating" value="2" />
+                <label for="input-rating-3">&#9733;</label
+                ><input id="input-rating-3" type="radio" name="rating" value="3" />
+                <label for="input-rating-4">&#9733;</label
+                ><input id="input-rating-4" type="radio" name="rating" value="4" />
+                <label for="input-rating-5">&#9733;</label
+                ><input id="input-rating-5" type="radio" name="rating" value="5" />
+              </div>
+              <button id="button-review" type="submit">Submit Review</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+      var PRODUCT_ID = 40;
+      var PRODUCT_NAME = 'iPhone';
+      var PRODUCT_PRICE = 101.0;
+
+      function getCart() {
+        try {
+          return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+      function updateBadge(cart) {
+        var count = cart.reduce(function (s, i) {
+          return s + i.qty;
+        }, 0);
+        document.getElementById('cart-total').textContent = count + ' item(s)';
+      }
+      updateBadge(getCart());
+
+      document.getElementById('button-cart').addEventListener('click', function () {
+        var qty = parseInt(document.getElementById('input-quantity').value) || 1;
+        var cart = getCart();
+        var existing = cart.find(function (i) {
+          return i.id === PRODUCT_ID;
+        });
+        if (existing) {
+          existing.qty += qty;
+        } else {
+          cart.push({ id: PRODUCT_ID, name: PRODUCT_NAME, price: PRODUCT_PRICE, qty: qty });
+        }
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        updateBadge(cart);
+        var alert = document.querySelector('.alert-success');
+        alert.textContent = 'Success: You have added ' + PRODUCT_NAME + ' to your shopping cart!';
+        alert.style.display = 'block';
+        setTimeout(function () {
+          alert.style.display = 'none';
+        }, 8000);
+      });
+
+      document.querySelectorAll('.nav-tabs a').forEach(function (tab) {
+        tab.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelectorAll('.tab-content > div').forEach(function (p) {
+            p.classList.remove('active');
+          });
+          var target = document.querySelector(this.getAttribute('href'));
+          if (target) target.classList.add('active');
+        });
+      });
+    </script>
+  </body>
+</html>

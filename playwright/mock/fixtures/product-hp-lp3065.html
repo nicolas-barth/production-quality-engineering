@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HP LP3065 — Your Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      .account-links a {
+        color: #ccc;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      main {
+        padding: 20px;
+      }
+      .alert {
+        padding: 10px 15px;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        display: none;
+      }
+      .alert-success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+      }
+      .alert-danger {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+      .price-new {
+        color: #c00;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      #button-cart {
+        background: #28a745;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      #input-quantity {
+        width: 60px;
+        padding: 5px;
+        text-align: center;
+        border: 1px solid #ccc;
+      }
+      ul.list-unstyled {
+        list-style: none;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none">Your Store</a>
+      <div class="header-right">
+        <div id="cart">
+          <button type="button" aria-label="Shopping cart">
+            <span id="cart-total">0 item(s)</span>
+          </button>
+        </div>
+        <div class="account-links">
+          <a class="nav-link" title="My Account" href="#">My Account</a>
+          <a href="/en-gb?route=account/login">Login</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <div role="alert" class="alert alert-success"></div>
+      <div role="alert" class="alert alert-danger"></div>
+
+      <div style="display: flex; gap: 30px; flex-wrap: wrap">
+        <div>
+          <img
+            id="image-main"
+            src=""
+            alt="HP LP3065"
+            width="300"
+            height="300"
+            style="border: 1px solid #ddd"
+          />
+        </div>
+        <div style="flex: 1; min-width: 250px">
+          <h1 class="title-product">HP LP3065</h1>
+          <div class="price-new">$122.00</div>
+          <div id="product-tab-description">
+            <ul class="list-unstyled">
+              <li><strong>Brand:</strong> HP</li>
+              <li><strong>Model:</strong> Product 17</li>
+              <li>
+                <strong>Availability:</strong> <span class="label label-success">In Stock</span>
+              </li>
+            </ul>
+          </div>
+          <div style="margin: 15px 0; display: flex; align-items: center; gap: 10px">
+            <label for="input-quantity">Qty</label>
+            <input id="input-quantity" type="number" value="1" min="1" max="999" />
+            <button id="button-cart" type="button">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+      function getCart() {
+        try {
+          return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+      function updateBadge(cart) {
+        var count = cart.reduce(function (s, i) {
+          return s + i.qty;
+        }, 0);
+        document.getElementById('cart-total').textContent = count + ' item(s)';
+      }
+      updateBadge(getCart());
+      document.getElementById('button-cart').addEventListener('click', function () {
+        var qty = parseInt(document.getElementById('input-quantity').value) || 1;
+        var cart = getCart();
+        var existing = cart.find(function (i) {
+          return i.id === 47;
+        });
+        if (existing) {
+          existing.qty += qty;
+        } else {
+          cart.push({ id: 47, name: 'HP LP3065', price: 122.0, qty: qty });
+        }
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        updateBadge(cart);
+        var alert = document.querySelector('.alert-success');
+        alert.textContent = 'Success: You have added HP LP3065 to your shopping cart!';
+        alert.style.display = 'block';
+      });
+    </script>
+  </body>
+</html>

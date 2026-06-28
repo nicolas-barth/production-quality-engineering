@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Checkout — Your Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      main {
+        padding: 20px;
+        max-width: 700px;
+      }
+      .checkout-step {
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        padding: 20px;
+      }
+      .checkout-step h2 {
+        margin-top: 0;
+        font-size: 18px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: bold;
+      }
+      input[type='text'],
+      input[type='email'],
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+      }
+      input[type='radio'],
+      input[type='checkbox'] {
+        margin-right: 6px;
+      }
+      .text-danger {
+        color: #dc3545;
+        font-size: 13px;
+        display: none;
+        margin-top: 4px;
+      }
+      button[id^='button-'] {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        padding: 8px 20px;
+        cursor: pointer;
+        border-radius: 3px;
+        margin-top: 10px;
+      }
+      #button-confirm {
+        background: #28a745;
+      }
+      #button-confirm:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+      }
+      .alert {
+        padding: 10px 15px;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        display: none;
+      }
+      .alert-danger {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none">Your Store</a>
+      <div id="cart">
+        <button type="button">
+          <span id="cart-total" aria-label="0 item(s)">0 item(s)</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="content">
+      <h1>Checkout</h1>
+
+      <!-- Step 1: Account / Guest -->
+      <div class="checkout-step" id="step-1">
+        <h2>Step 1: Account &amp; Personal Details</h2>
+        <fieldset>
+          <legend>Choose checkout type</legend>
+          <label
+            ><input type="radio" id="input-guest" name="account" value="guest" checked /> Guest
+            Checkout</label
+          ><br />
+          <label
+            ><input type="radio" id="input-login" name="account" value="login" /> Returning
+            Customer</label
+          >
+        </fieldset>
+        <div class="form-group" style="margin-top: 12px">
+          <label for="input-email">Email Address</label>
+          <input id="input-email" type="email" placeholder="Enter your email address" />
+        </div>
+        <button id="button-account" type="button">Continue</button>
+      </div>
+
+      <!-- Step 2: Billing Address -->
+      <div class="checkout-step" id="step-2" style="display: none">
+        <h2>Step 2: Billing Details</h2>
+        <div class="form-group">
+          <label for="input-payment-firstname">First Name</label>
+          <input id="input-payment-firstname" type="text" placeholder="First Name" />
+          <div id="error-payment-firstname" class="text-danger"></div>
+        </div>
+        <div class="form-group">
+          <label for="input-payment-lastname">Last Name</label>
+          <input id="input-payment-lastname" type="text" placeholder="Last Name" />
+          <div id="error-payment-lastname" class="text-danger"></div>
+        </div>
+        <div class="form-group">
+          <label for="input-payment-address-1">Address Line 1</label>
+          <input id="input-payment-address-1" type="text" placeholder="Address Line 1" />
+          <div id="error-payment-address-1" class="text-danger"></div>
+        </div>
+        <div class="form-group">
+          <label for="input-payment-city">City</label>
+          <input id="input-payment-city" type="text" placeholder="City" />
+          <div id="error-payment-city" class="text-danger"></div>
+        </div>
+        <div class="form-group">
+          <label for="input-payment-postcode">Post Code</label>
+          <input id="input-payment-postcode" type="text" placeholder="Post Code" />
+          <div id="error-payment-postcode" class="text-danger"></div>
+        </div>
+        <div class="form-group">
+          <label for="input-payment-country">Country</label>
+          <select id="input-payment-country" name="country_id">
+            <option value="">--- Please Select ---</option>
+            <option value="14">Australia</option>
+            <option value="102">Germany</option>
+            <option value="222">United Kingdom</option>
+            <option value="223">United States</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="input-payment-zone">Region / State</label>
+          <!--
+            Initially disabled. The country-change fetch() call populates this
+            and sets disabled=false. This makes the Cypress assertion
+            cy.get('#input-payment-zone').should('not.be.disabled') meaningful.
+          -->
+          <select id="input-payment-zone" name="zone_id" disabled>
+            <option value="">--- Please Select ---</option>
+          </select>
+          <div id="error-payment-zone" class="text-danger"></div>
+        </div>
+        <button id="button-payment-address" type="button">Continue</button>
+      </div>
+
+      <!-- Step 3: Delivery Address -->
+      <div class="checkout-step" id="step-3" style="display: none">
+        <h2>Step 3: Delivery Details</h2>
+        <label>
+          <input type="checkbox" id="input-shipping-address-0" name="same_address" checked />
+          My delivery and billing addresses are the same.
+        </label>
+        <button id="button-shipping-address" type="button">Continue</button>
+      </div>
+
+      <!-- Step 4: Delivery Method -->
+      <div class="checkout-step" id="step-4" style="display: none">
+        <h2>Step 4: Delivery Method</h2>
+        <fieldset>
+          <legend>Choose delivery method</legend>
+          <label
+            ><input type="radio" name="shipping_method" value="flat.flat" checked /> Flat Shipping
+            Rate — £5.00</label
+          >
+        </fieldset>
+        <button id="button-shipping-method" type="button">Continue</button>
+      </div>
+
+      <!-- Step 5: Payment Method -->
+      <div class="checkout-step" id="step-5" style="display: none">
+        <h2>Step 5: Payment Method</h2>
+        <fieldset>
+          <legend>Choose payment method</legend>
+          <label
+            ><input type="radio" name="payment_method" value="cod" checked /> Cash On
+            Delivery</label
+          >
+        </fieldset>
+        <button id="button-payment-method" type="button">Continue</button>
+      </div>
+
+      <!-- Step 6: Confirm Order -->
+      <div class="checkout-step" id="step-6" style="display: none">
+        <h2>Step 6: Confirm Order</h2>
+        <p>Please review your order before confirming.</p>
+        <div role="alert" class="alert alert-danger" id="error-agree-alert"></div>
+        <label
+          ><input type="checkbox" name="agree" id="input-agree" /> I have read and agree to the
+          <a href="#">Privacy Policy</a></label
+        >
+        <br />
+        <button id="button-confirm" type="button">Confirm Order</button>
+      </div>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+
+      // Show cart count from localStorage
+      (function () {
+        try {
+          var cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+          var count = cart.reduce(function (s, i) {
+            return s + i.qty;
+          }, 0);
+          var el = document.getElementById('cart-total');
+          el.textContent = count + ' item(s)';
+          el.setAttribute('aria-label', count + ' item(s)');
+        } catch (e) {
+          /* ignore */
+        }
+      })();
+
+      function showStep(n) {
+        [1, 2, 3, 4, 5, 6].forEach(function (s) {
+          var el = document.getElementById('step-' + s);
+          if (el) el.style.display = s === n ? 'block' : 'none';
+        });
+      }
+
+      // Step 1 → Step 2
+      document.getElementById('button-account').addEventListener('click', function () {
+        var email = document.getElementById('input-email').value.trim();
+        if (!email) {
+          document.getElementById('input-email').style.border = '1px solid #dc3545';
+          return;
+        }
+        showStep(2);
+      });
+
+      // Step 2 → Step 3
+      document.getElementById('button-payment-address').addEventListener('click', function () {
+        var required = [
+          ['input-payment-firstname', 'error-payment-firstname', 'First Name required'],
+          ['input-payment-lastname', 'error-payment-lastname', 'Last Name required'],
+          ['input-payment-address-1', 'error-payment-address-1', 'Address required'],
+          ['input-payment-city', 'error-payment-city', 'City required'],
+          ['input-payment-postcode', 'error-payment-postcode', 'Post Code required'],
+        ];
+        var valid = true;
+        required.forEach(function (r) {
+          var input = document.getElementById(r[0]);
+          var errEl = document.getElementById(r[1]);
+          if (!input || !input.value.trim()) {
+            if (errEl) {
+              errEl.textContent = r[2];
+              errEl.style.display = 'block';
+            }
+            valid = false;
+          } else {
+            if (errEl) errEl.style.display = 'none';
+          }
+        });
+        if (valid) showStep(3);
+      });
+
+      // Step 3 → Step 4
+      document.getElementById('button-shipping-address').addEventListener('click', function () {
+        showStep(4);
+      });
+
+      // Step 4 → Step 5
+      document.getElementById('button-shipping-method').addEventListener('click', function () {
+        showStep(5);
+      });
+
+      // Step 5 → Step 6
+      document.getElementById('button-payment-method').addEventListener('click', function () {
+        showStep(6);
+      });
+
+      // Step 6: Confirm Order
+      // Disables #button-confirm IMMEDIATELY on click (CY-CHKOUT-001 assertion).
+      // Then fires a POST fetch() so cy.wait('@confirmOrderPost') and cy.wait('@paymentTimeout')
+      // resolve in the Cypress tests. The catch handler shows an error for the
+      // forceNetworkError scenario (CY-CHKOUT-002).
+      document.getElementById('button-confirm').addEventListener('click', function () {
+        var agreed = document.getElementById('input-agree').checked;
+        if (!agreed) {
+          var errAlert = document.getElementById('error-agree-alert');
+          errAlert.textContent = 'Warning: You must agree to the Privacy Policy!';
+          errAlert.style.display = 'block';
+          return;
+        }
+
+        // Disable immediately — CY-CHKOUT-001 asserts button is disabled while POST is in-flight
+        this.disabled = true;
+        var self = this;
+
+        fetch('/en-gb/index.php?route=checkout/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'confirm=1',
+        })
+          .then(function (r) {
+            return r.json();
+          })
+          .then(function (data) {
+            if (data && data.redirect) {
+              localStorage.removeItem(CART_KEY);
+              window.location.href = data.redirect;
+            }
+          })
+          .catch(function () {
+            // CY-CHKOUT-002: forceNetworkError lands here.
+            // Re-enable button and surface an error so the body still has content.
+            self.disabled = false;
+            var errAlert = document.getElementById('error-agree-alert');
+            errAlert.textContent = 'Payment failed. Please try again later.';
+            errAlert.style.display = 'block';
+          });
+      });
+
+      // Country → region cascade
+      // URL uses /en-gb/index.php?route=... so it matches the Cypress intercept pattern:
+      //   cy.intercept('GET', '**/en-gb/index.php?route=localisation/country**').as('countryChange')
+      document.getElementById('input-payment-country').addEventListener('change', function () {
+        var countryId = this.value;
+        var regionSelect = document.getElementById('input-payment-zone');
+
+        // Disable while loading to make the 'not.be.disabled' assertion meaningful
+        regionSelect.disabled = true;
+        regionSelect.innerHTML = '<option value="">--- Loading ---</option>';
+
+        fetch('/en-gb/index.php?route=localisation/country/info&country_id=' + countryId)
+          .then(function (r) {
+            return r.json();
+          })
+          .then(function (data) {
+            regionSelect.innerHTML = '<option value="">--- Please Select ---</option>';
+            if (data && data.zone) {
+              data.zone.forEach(function (z) {
+                var opt = document.createElement('option');
+                opt.value = z.zone_id;
+                opt.textContent = z.name;
+                regionSelect.appendChild(opt);
+              });
+            }
+            regionSelect.disabled = false;
+          })
+          .catch(function () {
+            // Fallback — populate with common regions so the test can proceed
+            regionSelect.innerHTML = '<option value="">--- Please Select ---</option>';
+            [
+              ['2644', 'Greater London'],
+              ['2645', 'England'],
+              ['2646', 'Scotland'],
+            ].forEach(function (r) {
+              var opt = document.createElement('option');
+              opt.value = r[0];
+              opt.textContent = r[1];
+              regionSelect.appendChild(opt);
+            });
+            regionSelect.disabled = false;
+          });
+      });
+    </script>
+  </body>
+</html>

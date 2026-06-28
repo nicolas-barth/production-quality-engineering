@@ -1,0 +1,32 @@
+{
+  "registeredUser": {
+    "email": "qa.registered@example.com",
+    "password": "R3gist3r3d!Pass"
+  },
+  "validAddress": {
+    "firstName": "Test",
+    "lastName": "Automation",
+    "address1": "123 Quality Street",
+    "city": "London",
+    "postcode": "SW1A 1AA",
+    "country": "United Kingdom",
+    "region": "Greater London"
+  },
+  "products": {
+    "iphone": {
+      "id": 40,
+      "name": "iPhone",
+      "route": "product/product&product_id=40"
+    },
+    "macbook": {
+      "id": 43,
+      "name": "MacBook",
+      "route": "product/product&product_id=43"
+    }
+  },
+  "xssPayloads": [
+    "<script>alert('xss')</script>",
+    "\"><img src=x onerror=alert(1)>",
+    "javascript:alert(1)"
+  ]
+}

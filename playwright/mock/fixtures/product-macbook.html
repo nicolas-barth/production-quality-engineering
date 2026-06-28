@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MacBook — Your Store</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      input[name='search'] {
+        padding: 6px;
+        border: 1px solid #ccc;
+      }
+      #cart button {
+        background: #555;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      .account-links a {
+        color: #ccc;
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      main {
+        padding: 20px;
+      }
+      .alert {
+        padding: 10px 15px;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        display: none;
+      }
+      .alert-success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+      }
+      .alert-danger {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+      .price-new {
+        color: #c00;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      #button-cart {
+        background: #28a745;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      #input-quantity {
+        width: 60px;
+        padding: 5px;
+        text-align: center;
+        border: 1px solid #ccc;
+      }
+      ul.list-unstyled {
+        list-style: none;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/en-gb" style="color: #fff; font-weight: bold; text-decoration: none">Your Store</a>
+      <div class="header-right">
+        <form action="/en-gb?route=common/search" method="get" role="search">
+          <label for="search-input" style="position: absolute; left: -9999px">Search</label>
+          <input
+            id="search-input"
+            name="search"
+            type="search"
+            placeholder="Search"
+            aria-label="Search store products"
+          />
+          <button type="submit" aria-label="Submit search">Go</button>
+        </form>
+        <div id="cart">
+          <button type="button" aria-label="Shopping cart">
+            <span id="cart-total">0 item(s)</span>
+          </button>
+        </div>
+        <div class="account-links">
+          <a class="nav-link" title="My Account" href="#">My Account</a>
+          <a href="/en-gb?route=account/login">Login</a>
+          <a href="/en-gb?route=account/register">Register</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <div role="alert" class="alert alert-success"></div>
+      <div role="alert" class="alert alert-danger"></div>
+
+      <div style="display: flex; gap: 30px; flex-wrap: wrap">
+        <div>
+          <img
+            id="image-main"
+            src=""
+            alt="MacBook"
+            width="300"
+            height="300"
+            style="border: 1px solid #ddd"
+          />
+        </div>
+        <div style="flex: 1; min-width: 250px">
+          <h1 class="title-product">MacBook</h1>
+          <div class="price-new">$602.00</div>
+          <div id="product-tab-description">
+            <ul class="list-unstyled">
+              <li><strong>Brand:</strong> Apple</li>
+              <li><strong>Model:</strong> Product 16</li>
+              <li>
+                <strong>Availability:</strong> <span class="label label-success">In Stock</span>
+              </li>
+            </ul>
+          </div>
+          <div style="margin: 15px 0; display: flex; align-items: center; gap: 10px">
+            <label for="input-quantity">Qty</label>
+            <input id="input-quantity" type="number" value="1" min="1" max="999" />
+            <button id="button-cart" type="button">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      var CART_KEY = 'mockCart';
+      var PRODUCT_ID = 43;
+      var PRODUCT_NAME = 'MacBook';
+      var PRODUCT_PRICE = 602.0;
+
+      function getCart() {
+        try {
+          return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+      function updateBadge(cart) {
+        var count = cart.reduce(function (s, i) {
+          return s + i.qty;
+        }, 0);
+        document.getElementById('cart-total').textContent = count + ' item(s)';
+      }
+      updateBadge(getCart());
+
+      document.getElementById('button-cart').addEventListener('click', function () {
+        var qty = parseInt(document.getElementById('input-quantity').value) || 1;
+        var cart = getCart();
+        var existing = cart.find(function (i) {
+          return i.id === PRODUCT_ID;
+        });
+        if (existing) {
+          existing.qty += qty;
+        } else {
+          cart.push({ id: PRODUCT_ID, name: PRODUCT_NAME, price: PRODUCT_PRICE, qty: qty });
+        }
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        updateBadge(cart);
+        var alert = document.querySelector('.alert-success');
+        alert.textContent = 'Success: You have added ' + PRODUCT_NAME + ' to your shopping cart!';
+        alert.style.display = 'block';
+        setTimeout(function () {
+          alert.style.display = 'none';
+        }, 8000);
+      });
+    </script>
+  </body>
+</html>
